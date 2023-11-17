@@ -1,6 +1,6 @@
 from commerce import app
 from flask import render_template
-from commerce.models.product import Product
+from commerce.models import Product
 
 @app.route('/')
 def page_home():
