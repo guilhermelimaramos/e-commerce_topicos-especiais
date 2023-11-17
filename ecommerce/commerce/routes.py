@@ -1,7 +1,7 @@
 from commerce import app
 from flask import render_template
 from commerce.models import Product
-from forms import SignUpForm
+from commerce.forms import SignUpForm
 
 @app.route('/')
 def page_home():
