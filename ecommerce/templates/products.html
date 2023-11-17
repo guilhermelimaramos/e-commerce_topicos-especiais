@@ -14,15 +14,22 @@
       <th scope="col">Name</th>
       <th scope="col">Bar code</th>
       <th scope="col">Price</th>
+      <th scope="col">Description</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
-    {% for item in itens %}
+    {% for prod in product %}
     <tr>
-      <td>{{item.id}}</td>
-      <td>{{item.name}}</td>
-      <td>{{item.bar_code}}</td>
-      <td>{{item.price}}</td>
+      <td>{{prod.id}}</td>
+      <td>{{prod.name}}</td>
+      <td>{{prod.bar_code}}</td>
+      <td>{{prod.price}}</td>
+      <td>{{prod.description}}</td>
+      <td>
+        <button class="btn btn-outline-info">More information</button>
+        <button class="btn btn-outline btn-success">Buy</button>
+      </td>
     </tr>
     {% endfor %}
   </tbody>

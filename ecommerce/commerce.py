@@ -12,6 +12,9 @@ class Product(db.Model):
   price = db.Column(db.Integer, nullable=False)
   bar_code = db.Column(db.String(length=12), nullable=False, unique=True)
   description = db.Column(db.String(length=1024), nullable=False)
+
+def __repr__(self):
+  return f"Product {self.name}"
   
 
 @app.route('/')
@@ -20,11 +23,6 @@ def page_home():
 
 @app.route('/products')
 def page_products():
-  itens = [
-    {'id': 1, 'name': 'Phone', 'bar_code': '453462662', 'price': 1600},
-    {'id': 2, 'name': 'Notebook', 'bar_code': '985342798', 'price': 3500},
-    {'id': 3, 'name': 'Keyboard', 'bar_code': '187856781', 'price': 80},
-    {'id': 4, 'name': 'Monitor', 'bar_code': '175981653', 'price': 2000}
-  ]
-  return render_template('products.html', itens=itens)
+  product = Product.query.all()
+  return render_template('products.html', product=product)
 
