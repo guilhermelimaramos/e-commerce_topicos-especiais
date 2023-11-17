@@ -4,6 +4,6 @@ from wtforms import StringField, PasswordField, SubmitField
 class SignUpForm(FlaskForm):
   username = StringField(label='Username:')
   email = StringField(label='Email:')
-  password1 = StringField(label='Password:')
-  password2 = StringField(label='Confirm Password:')
+  password1 = PasswordField(label='Password:')
+  password2 = PasswordField(label='Confirm Password:')
   submit = SubmitField(label='Sign up')

@@ -12,6 +12,9 @@
         Create your account
       </h1>
       <form method="POST" class="form-register" style="color: whitesmoke;">
+
+        {{ form.hidden_tag() }}
+
         {{form.username.label()}}
         {{form.username(class="form-control w-50 m-auto", placeholder="enter your username")}}
 
