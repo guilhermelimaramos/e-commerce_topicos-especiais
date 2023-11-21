@@ -1,5 +1,5 @@
 from commerce import app
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash
 from commerce.models import Product, User
 from commerce.forms import SignUpForm
 from commerce import db
@@ -25,5 +25,7 @@ def page_signup():
     db.session.add(new_user)
     db.session.commit()
     return redirect(url_for('page_products'))
-  
+  if form.errors != {}:
+    for err in form.errors.values():
+      flash(f"Error {err}", category="danger")
   return render_template('signup.html', form=form)
