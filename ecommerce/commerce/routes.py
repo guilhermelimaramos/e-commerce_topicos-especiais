@@ -29,3 +29,7 @@ def page_signup():
     for err in form.errors.values():
       flash(f"Error {err}", category="danger")
   return render_template('signup.html', form=form)
+
+@app.route('/signin', methods=['GET', 'POST'])
+def page_signin():
+  return render_template('login.html')
