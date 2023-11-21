@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, flash
 from commerce.models import Product, User
 from commerce.forms import SignUpForm, SignInForm
 from commerce import db
+from flask_login import login_user
 
 @app.route('/')
 def page_home():
@@ -33,5 +34,12 @@ def page_signup():
 @app.route('/signin', methods=['GET', 'POST'])
 def page_signin():
   form = SignInForm()
-
+  if form.validate_on_submit():
+    user_signin = User.query.filter_by(username=form.username.data).first()
+    if user_signin and user_signin.pw_decript(pw_text=form.password.data):
+      login_user(user_signin)
+      flash(f'Welcome! {user_signin.username}', category='success')
+      return redirect(url_for('page_products'))
+    else: 
+      flash(f'Error: incorrect username and/or password! Try again!', category='danger')
   return render_template('login.html', form=form)

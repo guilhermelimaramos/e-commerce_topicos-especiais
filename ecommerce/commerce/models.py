@@ -1,7 +1,13 @@
-from commerce import db
+from commerce import db, login_manager
 from commerce import bcrypt
+from flask_login import UserMixin
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+
+class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   username = db.Column(db.String(length=30), nullable=False, unique=True)
   email = db.Column(db.String(length=50), nullable=False, unique=True)
@@ -16,7 +22,10 @@ class User(db.Model):
   @pw_hash.setter
   def pw_hash(self, pw_text):
     self.password = bcrypt.generate_password_hash(pw_text).decode('utf-8')
-
+  
+  
+  def pw_decript(self, pw_text):
+    return bcrypt.check_password_hash(self.password, pw_text)
 class Product(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(length=30), nullable=False, unique=True)
