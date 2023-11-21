@@ -1,7 +1,7 @@
 from commerce import app
 from flask import render_template, redirect, url_for, flash
 from commerce.models import Product, User
-from commerce.forms import SignUpForm
+from commerce.forms import SignUpForm, SignInForm
 from commerce import db
 
 @app.route('/')
@@ -32,4 +32,6 @@ def page_signup():
 
 @app.route('/signin', methods=['GET', 'POST'])
 def page_signin():
-  return render_template('login.html')
+  form = SignInForm()
+
+  return render_template('login.html', form=form)
