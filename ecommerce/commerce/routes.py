@@ -20,7 +20,7 @@ def page_signup():
     new_user = User(
       username = form.username.data,
       email = form.email.data,
-      password = form.password1.data
+      pw_hash = form.password1.data
     )
     db.session.add(new_user)
     db.session.commit()
