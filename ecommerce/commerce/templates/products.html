@@ -5,33 +5,40 @@
 {% endblock %}
 
 {% block content %}
-<h2 style="text-align: center">Products</h2>
-<hr>
-<table class="table table-hover table-dark table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Name</th>
-      <th scope="col">Bar code</th>
-      <th scope="col">Price</th>
-      <th scope="col">Description</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for prod in product %}
-    <tr>
-      <td>{{prod.id}}</td>
-      <td>{{prod.name}}</td>
-      <td>{{prod.bar_code}}</td>
-      <td>{{prod.price}}</td>
-      <td>{{prod.description}}</td>
-      <td>
-        <button class="btn btn-outline-info">More information</button>
-        <button class="btn btn-outline btn-success">Buy</button>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <div class="row" style="margin-top: 20px; margin-left: 20px;">
+    <div class="col-7">
+      <h2 style="text-align: center">Products Available</h2>
+      <p style="text-align: center;">click on buy if you are interested </p>
+      <hr>
+        <table class="table table-hover table-dark table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Bar code</th>
+                <th scope="col">Price</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for prod in product %}
+              <tr>
+                <td>{{prod.id}}</td>
+                <td>{{prod.name}}</td>
+                <td>{{prod.bar_code}}</td>
+                <td>{{prod.price}}</td>
+                <td>
+                  <button class="btn btn-outline-info">More information</button>
+                  <button class="btn btn-outline btn-success">Buy</button>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    <div class="col-5">
+      <h2 style="text-align: center">Produtos Adquiridos</h2>
+      <p style="text-align: center">You can return the item if you wish</p>
+    </div>
+  </div>
 {% endblock %}
