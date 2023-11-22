@@ -28,7 +28,7 @@ def page_signup():
     return redirect(url_for('page_products'))
   if form.errors != {}:
     for err in form.errors.values():
-      flash(f"Error {err}", category="danger")
+      flash(f"Error: {', '.join([str(e).replace('[', '').replace(']', '') for e in err])}", category="danger")
   return render_template('signup.html', form=form)
 
 @app.route('/signin', methods=['GET', 'POST'])
