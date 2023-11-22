@@ -30,12 +30,23 @@
         <h5 class="modal-title" id="exampleModalLabel">{{prod.name}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        Would you like to buy this product: <strong>{{prod.name}}</strong> for R$ {{prod.price}}?
+      <div class="modal-body text-center">
+        <form method="POST">
+          {{ buy_form.hidden_tag() }}
+          <h4>
+            Would you like to buy this product: <strong>{{prod.name}}</strong> for R$ {{prod.price}}?
+          </h4>
+          <br>
+          <h6>
+            click buy to confirm your purchase 
+          </h6>
+          <br>
+          <input id="buy_product" name="buy_product" type="hidden" value="{{prod.name}}">
+          {{buy_form.submit(class="btn btn-outline-success btn-block ")}}
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline btn-success">Buy</button>
       </div>
     </div>
   </div>
