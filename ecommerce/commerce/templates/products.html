@@ -30,7 +30,7 @@
                 <td>{{prod.price}}</td>
                 <td>
                   <button data-bs-toggle="modal" data-bs-target="#exampleModal-{{prod.id}}" class="btn btn-outline-info">More information</button>
-                  <button class="btn btn-outline btn-success">Buy</button>
+                  <button data-bs-toggle="modal" data-bs-target="#ModalBuy-{{prod.id}}" class="btn btn-outline btn-success">Buy</button>
                 </td>
               </tr>
             {% endfor %}
