@@ -23,10 +23,23 @@
           <a class="nav-link active" aria-current="page" href="{{url_for('page_home')}}">Home</a>
           <a class="nav-link" href="{{url_for('page_products')}}">Products</a>
         </div>
+        {% if current_user.is_authenticated %}
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link">Welcome, {{ current_user.username }}</a>
+          <a class="nav-link" style="color: lawngreen; font-weight: bold;">
+            {{current_user.format_balance}}
+            <i class="fa-solid fa-coins"></i>
+          </a>
+          <a class="nav-link" href="#">Logout</a>
+        </div>
+
+        {% else %}
         <div class="navbar-nav ms-auto">
           <a class="nav-link" href="{{url_for('page_signin')}}">Sign in</a>
           <a class="nav-link" href="{{url_for('page_signup')}}">Sign up</a>
         </div>
+        {% endif %}
+
       </div>
     </div>
   </nav>
@@ -59,6 +72,7 @@
     </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/63d5661cb6.js" crossorigin="anonymous"></script>
   <style>
     body {
       background-color: #313131;

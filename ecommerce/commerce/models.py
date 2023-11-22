@@ -16,6 +16,13 @@ class User(db.Model, UserMixin):
   products = db.relationship('Product', backref='owner_user', lazy=True)
 
   @property
+  def format_balance(self):
+    if len(str(self.balance)) >= 4:
+      return f"R$ {str(self.balance)[:-3]}, {str(self.balance)[-3:]}"
+    else:
+      return f"R$ {self.balance}"
+  
+  @property
   def pw_hash(self):
     return self.pw_hash
 
