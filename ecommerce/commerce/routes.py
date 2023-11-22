@@ -3,13 +3,14 @@ from flask import render_template, redirect, url_for, flash
 from commerce.models import Product, User
 from commerce.forms import SignUpForm, SignInForm
 from commerce import db
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 
 @app.route('/')
 def page_home():
   return render_template('home.html')
 
 @app.route('/products')
+@login_required
 def page_products():
   product = Product.query.all()
   return render_template('products.html', product=product)

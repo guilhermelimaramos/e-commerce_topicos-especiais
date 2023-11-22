@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
-  <h2 style="text-align: center">Home Page</h2>
-  <hr>
+  <div class="py-5">
+    <header class="h-100 p-5 text-white bg-dark text-center justify-content-center align-items-center">
+      <h1 class="display-5 fw-bold">Any Title</h1>
+      <p class="fs-4">Welcome to the application, see our products</p>
+      <a class="btn btn-success" type="button" href="{{url_for('page_products')}}">View products</a>
+    </header>
+  </div>
 {% endblock %}
