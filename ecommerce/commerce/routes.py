@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, flash
 from commerce.models import Product, User
 from commerce.forms import SignUpForm, SignInForm
 from commerce import db
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 @app.route('/')
 def page_home():
@@ -43,3 +43,9 @@ def page_signin():
     else: 
       flash(f'Error: incorrect username and/or password! Try again!', category='danger')
   return render_template('login.html', form=form)
+
+@app.route('/logout')
+def page_logout():
+  logout_user()
+  flash("You have logged out", category="info")
+  return redirect(url_for('page_home'))
