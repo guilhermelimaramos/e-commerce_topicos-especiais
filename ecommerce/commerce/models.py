@@ -36,6 +36,9 @@ class User(db.Model, UserMixin):
   def purchase_available(self, item_obj):
     return self.balance >= item_obj.price
   
+  def sell_available(self, item_obj):
+    return self.id == item_obj.owner
+  
 class Product(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(length=30), nullable=False, unique=True)
@@ -50,4 +53,9 @@ class Product(db.Model):
   def purchase(self, user):
     self.owner = user.id
     user.balance -= self.price
+    db.session.commit()
+  
+  def sell(self, user):
+    self.owner = None
+    user.balance += self.price
     db.session.commit()

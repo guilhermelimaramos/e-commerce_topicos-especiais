@@ -15,16 +15,26 @@ def page_products():
   buy_form = BuyProductForm()
   sell_form = SellProductForm()
   if request.method == 'POST':
+    # Buy product
     buy_product = request.form.get('buy_product')
     prod_obj = Product.query.filter_by(name=buy_product).first()
-    print(prod_obj.owner)
     if prod_obj:
       if current_user.purchase_available(prod_obj):
         prod_obj.purchase(user=current_user)
         flash(f'Congratulations! You bought {prod_obj.name} for R$ {prod_obj.price}', category='success')
       else:
         flash(f'Error: insufficient balance to buy {prod_obj.name}!', category='danger')
+    # Sell product
+    sell_product = request.form.get('sell_product')
+    prod_obj_sell = Product.query.filter_by(name=sell_product).first()
+    if prod_obj_sell:
+      if current_user.sell_available(prod_obj_sell):
+        prod_obj_sell.sell(user=current_user)
+        flash(f'Congratulations! You sold {prod_obj_sell.name} for R$ {prod_obj_sell.price}', category='success')
+      else:
+        flash(f'Error: you cannot sell {prod_obj_sell.name}!', category='danger')
     return redirect(url_for('page_products'))
+  
   if request.method == 'GET':
     product = Product.query.filter_by(owner=None)
     owner_products = Product.query.filter_by(owner=current_user.id)
