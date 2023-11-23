@@ -13,6 +13,7 @@ def page_home():
 @login_required
 def page_products():
   buy_form = BuyProductForm()
+  sell_form = SellProductForm()
   if request.method == 'POST':
     buy_product = request.form.get('buy_product')
     prod_obj = Product.query.filter_by(name=buy_product).first()
@@ -27,7 +28,7 @@ def page_products():
   if request.method == 'GET':
     product = Product.query.filter_by(owner=None)
     owner_products = Product.query.filter_by(owner=current_user.id)
-    return render_template('products.html', product=product, buy_form=buy_form, owner_products=owner_products)
+    return render_template('products.html', product=product, buy_form=buy_form, owner_products=owner_products, sell_form=sell_form)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def page_signup():
