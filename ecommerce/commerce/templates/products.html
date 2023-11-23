@@ -5,64 +5,26 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row" style="margin-top: 20px; margin-left: 20px;">
-    <div class="col-7">
-      <h2 style="text-align: center">Products Available</h2>
-      <p style="text-align: center;">click on buy if you are interested </p>
-      <hr>
-        <table class="table table-hover table-dark table-bordered">
-          <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Bar code</th>
-                <th scope="col">Price</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for prod in product %}
-              {% include 'includes/modal_products.html' %}
-              <tr>
-                <td>{{prod.name}}</td>
-                <td>{{prod.bar_code}}</td>
-                <td>{{prod.price}}</td>
-                <td>
-                  <button data-bs-toggle="modal" data-bs-target="#exampleModal-{{prod.id}}" class="btn btn-outline-info">More information</button>
-                  <button data-bs-toggle="modal" data-bs-target="#ModalBuy-{{prod.id}}" class="btn btn-outline btn-success">Buy</button>
-                </td>
-              </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-      </div>
-    <div class="col-5">
-      <h2 style="text-align: center">Produtos Adquiridos</h2>
-      <p style="text-align: center">You can return the item if you wish</p>
-      <hr>
-      <div class="row">
-      {% for owner_product in owner_products %}
-      {% include 'includes/modal_owner_products.html' %}
-        <div class="col-md-6">
-          <div class="card text-center bg-dark " style="width: 16rem; color: white;">
-            <div class="card-body">
-              <h5 class="card-title">{{owner_product.name}}</h5>
-              <button
-              style="margin-bottom: 10px; margin-top: 10px"
-              data-bs-toggle="modal"
-              data-bs-target="#ModalSell-{{owner_product.id}}"
-              class="btn btn-outline-danger"
-              type="button">
-                Sell
-              </button>
-              <p>
-                <strong>This product costs R$ {{owner_product.price}}</strong>
-              </p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
+<div class="" style="margin-top: 20px; padding-left: 20px; padding-right: 20px">
+  <div class="w-full">
+    <h2 style="text-align: center">Products Available</h2>
+    <p style="text-align: center">click on buy if you are interested </p>
+    <hr>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      {% for prod in product %}
+      <div class="col">
+        <div class="card">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{prod.name}}</h5>
+            <p class="card-text">{{prod.description}}</p>
+            <a href="#" class="btn btn-primary">Add to Cart</a>
           </div>
         </div>
-      {% endfor %}
       </div>
+      {% endfor %}
     </div>
   </div>
+</div>
 {% endblock %}
+
