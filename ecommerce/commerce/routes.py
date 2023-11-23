@@ -1,7 +1,7 @@
 from commerce import app
 from flask import render_template, redirect, url_for, flash, request
 from commerce.models import Product, User
-from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm
+from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm, ChangeUsernameForm
 from commerce import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -75,3 +75,16 @@ def page_logout():
   logout_user()
   flash("You have logged out", category="info")
   return redirect(url_for('page_home'))
+
+@app.route('/change_username', methods=['GET', 'POST', 'PUT'])
+def page_change_username():
+  form = ChangeUsernameForm()
+  if form.validate_on_submit():
+    user_exists = User.query.filter_by(username=form.username.data).first()
+    if not user_exists:
+      current_user.change_username(new_username=form.username.data)
+      flash("Username changed!", category="success")
+      return redirect(url_for('page_home'))
+    else:
+      flash("Error: username already exists!", category="danger")
+  return render_template('change_username.html', form=form)

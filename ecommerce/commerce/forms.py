@@ -28,3 +28,7 @@ class BuyProductForm(FlaskForm):
 
 class SellProductForm(FlaskForm):
   submit = SubmitField(label='Sell')
+
+class ChangeUsernameForm(FlaskForm):
+  username = StringField(label='New username:', validators=[Length(min=3, max=30), DataRequired()])
+  submit = SubmitField(label='Change')
