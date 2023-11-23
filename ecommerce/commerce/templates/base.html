@@ -32,8 +32,9 @@
           
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
               <li><a class="dropdown-item" href="{{url_for('page_change_username')}}">Change username</a></li>
-              <li><a class="dropdown-item" href="#">Change password</a></li>
-              <li><a class="dropdown-item" href="#">Delete account</a></li>
+              <li><a class="dropdown-item" href="{{url_for('page_change_password')}}">Change password</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a data-bs-toggle="modal" data-bs-target="#ModalDelete" class="dropdown-item" style="color: rgba(255, 0, 0, 0.548);">Delete account</a></li>
             </ul>
           </div>
           <a class="nav-link" style="color: lawngreen; font-weight: bold;">

@@ -1,7 +1,7 @@
 from commerce import app
 from flask import render_template, redirect, url_for, flash, request
 from commerce.models import Product, User
-from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm, ChangeUsernameForm
+from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm, ChangeUsernameForm, ChangePasswordForm
 from commerce import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -88,3 +88,20 @@ def page_change_username():
     else:
       flash("Error: username already exists!", category="danger")
   return render_template('change_username.html', form=form)
+
+@app.route('/change_password', methods=['GET', 'POST', 'PUT'])
+def page_change_password():
+  form = ChangePasswordForm()
+  if form.validate_on_submit():
+    current_user.change_password(new_password=form.password1.data)
+    flash("Password changed!", category="success")
+    return redirect(url_for('page_home'))
+  else:
+    flash("Error: passwords do not match!", category="danger")
+  return render_template('change_password.html', form=form)
+
+@app.route('/delete_account', methods=['GET', 'POST', 'DELETE'])
+def page_delete_account():
+  current_user.delete_account()
+  flash("Account deleted!", category="success")
+  return redirect(url_for('page_home'))

@@ -32,3 +32,8 @@ class SellProductForm(FlaskForm):
 class ChangeUsernameForm(FlaskForm):
   username = StringField(label='New username:', validators=[Length(min=3, max=30), DataRequired()])
   submit = SubmitField(label='Change')
+
+class ChangePasswordForm(FlaskForm):
+  password1 = PasswordField(label='New password:', validators=[Length(min=6), DataRequired()])
+  password2 = PasswordField(label='Confirm new password:', validators=[EqualTo('password1', 'Passwords do not match.'), DataRequired()])
+  submit = SubmitField(label='Change')
