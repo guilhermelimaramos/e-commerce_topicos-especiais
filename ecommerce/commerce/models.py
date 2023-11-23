@@ -39,6 +39,18 @@ class User(db.Model, UserMixin):
   def sell_available(self, item_obj):
     return self.id == item_obj.owner
   
+  def change_username(self, new_username):
+    self.username = new_username
+    db.session.commit()
+  
+  def change_password(self, new_password):
+    self.pw_hash = new_password
+    db.session.commit()
+
+  def delete_account(self):
+    db.session.delete(self)
+    db.session.commit()
+  
 class Product(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(length=30), nullable=False, unique=True)

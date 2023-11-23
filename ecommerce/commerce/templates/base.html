@@ -25,7 +25,18 @@
         </div>
         {% if current_user.is_authenticated %}
         <div class="navbar-nav ms-auto">
-          <a class="nav-link">Welcome, {{ current_user.username }}</a>
+          <div class="dropdown">
+            <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+              Welcome, {{ current_user.username }}
+            </a>
+            {% include 'includes/modal_delete_account.html' %}
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+              <li><a class="dropdown-item" href="{{url_for('page_change_username')}}">Change username</a></li>
+              <li><a class="dropdown-item" href="{{url_for('page_change_password')}}">Change password</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a data-bs-toggle="modal" data-bs-target="#ModalDelete" class="dropdown-item" style="color: rgba(255, 0, 0, 0.548);">Delete account</a></li>
+            </ul>
+          </div>
           <a class="nav-link" style="color: lawngreen; font-weight: bold;">
             {{current_user.format_balance}}
             <i class="fa-solid fa-coins"></i>

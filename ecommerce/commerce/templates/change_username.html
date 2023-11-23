@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Change Username
+{% endblock %}
+
+{% block content %}
+  <body>
+
+    <div class="container w-25" style="margin-top: 7rem;">
+      <h1 class="h3 mb-3 font-weight-normal text-center" style="font-size: 1.8em;">
+        Change your username
+      </h1>
+      <form method="POST" class="form-register text-start" style="color: whitesmoke;" onsubmit="return validateForm();">
+
+        {{ form.hidden_tag() }}
+
+        {{form.username.label(class)}}
+        {{form.username(class="form-control", placeholder="Enter your username", required=True)}}
+
+      <div class="d-grid">
+        {{form.submit(class="btn btn-success w-50 m-auto mt-4")}}
+      </div>
+        
+      </form>
+    </div>
+  </body>
+{% endblock %}
