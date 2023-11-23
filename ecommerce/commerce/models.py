@@ -30,9 +30,12 @@ class User(db.Model, UserMixin):
   def pw_hash(self, pw_text):
     self.password = bcrypt.generate_password_hash(pw_text).decode('utf-8')
   
-  
   def pw_decript(self, pw_text):
     return bcrypt.check_password_hash(self.password, pw_text)
+  
+  def purchase_available(self, item_obj):
+    return self.balance >= item_obj.price
+  
 class Product(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(length=30), nullable=False, unique=True)
