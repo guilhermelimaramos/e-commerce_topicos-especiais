@@ -44,5 +44,10 @@ class Product(db.Model):
   description = db.Column(db.String(length=1024), nullable=False)
   owner = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-def __repr__(self):
-  return f"Product {self.name}"
+  def __repr__(self):
+    return f"Product {self.name}"
+
+  def purchase(self, user):
+    self.owner = user.id
+    user.balance -= self.price
+    db.session.commit()

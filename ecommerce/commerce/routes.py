@@ -19,16 +19,15 @@ def page_products():
     print(prod_obj.owner)
     if prod_obj:
       if current_user.purchase_available(prod_obj):
-        prod_obj.owner = current_user.id
-        current_user.balance -= prod_obj.price
-        db.session.commit()
+        prod_obj.purchase(user=current_user)
         flash(f'Congratulations! You bought {prod_obj.name} for R$ {prod_obj.price}', category='success')
       else:
         flash(f'Error: insufficient balance to buy {prod_obj.name}!', category='danger')
     return redirect(url_for('page_products'))
   if request.method == 'GET':
     product = Product.query.filter_by(owner=None)
-    return render_template('products.html', product=product, buy_form=buy_form)
+    owner_products = Product.query.filter_by(owner=current_user.id)
+    return render_template('products.html', product=product, buy_form=buy_form, owner_products=owner_products)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def page_signup():
