@@ -29,7 +29,7 @@
             <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
               Welcome, {{ current_user.username }}
             </a>
-          
+            {% include 'includes/modal_delete_account.html' %}
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
               <li><a class="dropdown-item" href="{{url_for('page_change_username')}}">Change username</a></li>
               <li><a class="dropdown-item" href="{{url_for('page_change_password')}}">Change password</a></li>
