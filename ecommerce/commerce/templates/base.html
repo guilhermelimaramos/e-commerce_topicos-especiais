@@ -64,8 +64,21 @@
       <button type="button" class="btn-close text-reset bg-white white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
+      {% for cart in carts  %}
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4 text-center">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU" alt="..." style="height: 100px; width: 100px;">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{cart.name}}</h5>
+              <p class="card-text"><small class="text-muted">R$ {{cart.price}}</small></p>
+            </div>
+          </div>
+        </div>
       <div>
-        Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+      {% endfor %}
       </div>
       <div class="dropdown mt-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">

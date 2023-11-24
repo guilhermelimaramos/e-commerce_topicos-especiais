@@ -1,7 +1,7 @@
 from commerce import app
 from flask import render_template, redirect, url_for, flash, request
 from commerce.models import Product, User
-from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm, ChangeUsernameForm, ChangePasswordForm
+from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm
 from commerce import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -14,6 +14,7 @@ def page_home():
 def page_products():
   buy_form = BuyProductForm()
   sell_form = SellProductForm()
+  add_cart_form = AddCartForm()
   if request.method == 'POST':
     # Buy product
     buy_product = request.form.get('buy_product')
@@ -33,12 +34,23 @@ def page_products():
         flash(f'Congratulations! You sold {prod_obj_sell.name} for R$ {prod_obj_sell.price}', category='success')
       else:
         flash(f'Error: you cannot sell {prod_obj_sell.name}!', category='danger')
+    # Add to cart
+    add_cart_product = request.form.get('add_cart_product')
+    prod_obj_add_cart = Product.query.filter_by(name=add_cart_product).first()
+    if prod_obj_add_cart:
+      if current_user.purchase_available(prod_obj_add_cart):
+        prod_obj_add_cart.add_cart(user=current_user)
+        carts = Product.query.filter_by(status='cart')
+        render_template('base.html', carts=carts)
+        flash(f'Congratulations! You added {prod_obj_add_cart.name} to your cart!', category='success')
+      else:
+        flash(f'Error: insufficient balance to add {prod_obj_add_cart.name} to your cart!', category='danger')
     return redirect(url_for('page_products'))
   
   if request.method == 'GET':
     product = Product.query.filter_by(owner=None)
     owner_products = Product.query.filter_by(owner=current_user.id)
-    return render_template('products.html', product=product, buy_form=buy_form, owner_products=owner_products, sell_form=sell_form)
+    return render_template('products.html', product=product, buy_form=buy_form, owner_products=owner_products, sell_form=sell_form, add_cart_form=add_cart_form)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def page_signup():
@@ -105,3 +117,9 @@ def page_delete_account():
   current_user.delete_account()
   flash("Account deleted!", category="success")
   return redirect(url_for('page_home'))
+
+@app.route('/base', methods=['GET'])
+def page_base():
+  cart = Product.query.filter_by(status='cart')
+  # cart = owner.filter_by(status='cart')
+  return render_template('base.html', cart=cart)

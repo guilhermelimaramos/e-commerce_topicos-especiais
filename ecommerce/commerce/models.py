@@ -73,3 +73,8 @@ class Product(db.Model):
     self.owner = None
     user.balance += self.price
     db.session.commit()
+
+  def add_cart(self, user):
+    self.status = 'cart'
+    self.owner = user.id
+    db.session.commit()
