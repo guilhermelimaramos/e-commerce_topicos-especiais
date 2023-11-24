@@ -12,13 +12,15 @@
     <hr>
     <div class="row row-cols-1 row-cols-md-4 g-4">
       {% for prod in product %}
+      {% include 'includes/modal_products.html' %}
       <div class="col">
-        <div class="card">
+        <div class="card bg-dark text-white">
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">{{prod.name}}</h5>
             <p class="card-text">{{prod.description}}</p>
-            <a href="#" class="btn btn-primary">Add to Cart</a>
+            <button data-bs-toggle="modal" data-bs-target="#ModalBuy-{{prod.id}}" class="btn btn-outline btn-success">Add to Cart</button>
+            <button data-bs-toggle="modal" data-bs-target="#exampleModal-{{prod.id}}" class="btn btn-outline-secondary">More Information</button>
           </div>
         </div>
       </div>
