@@ -1,6 +1,7 @@
 from commerce import db, login_manager
 from commerce import bcrypt
 from flask_login import UserMixin
+from sqlalchemy import Enum
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -57,6 +58,7 @@ class Product(db.Model):
   price = db.Column(db.Integer, nullable=False)
   bar_code = db.Column(db.String(length=12), nullable=False, unique=True)
   description = db.Column(db.String(length=1024), nullable=False)
+  status = db.Column(Enum('available', 'cart', 'sold', name='status'), nullable=False, default='available')
   owner = db.Column(db.Integer, db.ForeignKey('user.id'))
 
   def __repr__(self):
