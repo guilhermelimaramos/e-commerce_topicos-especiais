@@ -14,7 +14,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">e-commerce</a>
+      <a class="navbar-brand" href="#" style="padding-top:-2px">e-commerce</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -25,12 +25,16 @@
         </div>
         {% if current_user.is_authenticated %}
         <div class="navbar-nav ms-auto">
+          <a class="btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+            <i type="button" class="fa-solid fa-cart-shopping" style="color: lawngreen; font-weight: bold; padding-top: 6px"></i>
+          </a>
           <div class="dropdown">
             <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-              Welcome, {{ current_user.username }}
+              Welcome, <span style="color: lawngreen; font-weight: bold;">{{ current_user.username }}</span>
             </a>
             {% include 'includes/modal_delete_account.html' %}
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+
               <li><a class="dropdown-item" href="{{url_for('page_change_username')}}">Change username</a></li>
               <li><a class="dropdown-item" href="{{url_for('page_change_password')}}">Change password</a></li>
               <li><hr class="dropdown-divider"></li>
@@ -50,10 +54,31 @@
           <a class="nav-link" href="{{url_for('page_signup')}}">Sign up</a>
         </div>
         {% endif %}
-
       </div>
     </div>
   </nav>
+
+  <div class="offcanvas offcanvas-start bg-black text-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
+      <button type="button" class="btn-close text-reset bg-white white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+      </div>
+      <div class="dropdown mt-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+          Dropdown button
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -74,6 +99,11 @@
 
   {% endblock %}
   
+  <style>
+    .btn-close.white {
+      --bs-close-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 16 16' fill='white' stroke='white' class='bi bi-x' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586l6.293-6.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+    }
+  </style>
   <script>
     $(document).ready(function(){
         $(".alert").fadeTo(2000, 500).slideUp(500, function(){
