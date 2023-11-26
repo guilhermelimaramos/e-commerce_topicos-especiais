@@ -5,6 +5,14 @@ from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductFo
 from commerce import db
 from flask_login import login_user, logout_user, login_required, current_user
 
+@app.context_processor
+def inject_products():
+    product = Product.query.filter_by(owner=None)
+    owner_products = None
+    if current_user.is_authenticated:
+        owner_products = Product.query.filter_by(owner=current_user.id)
+    return dict(product=product, owner_products=owner_products)
+
 @app.route('/')
 def page_home():
   return render_template('home.html')
