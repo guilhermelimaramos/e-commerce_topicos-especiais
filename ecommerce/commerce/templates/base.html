@@ -58,13 +58,14 @@
     </div>
   </nav>
 
+  {% if current_user.is_authenticated %}
   <div class="offcanvas offcanvas-start bg-black text-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
       <button type="button" class="btn-close text-reset bg-white white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      {% for cart in carts  %}
+      {% for owner_product in owner_products %}
       <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
           <div class="col-md-4 text-center">
@@ -72,26 +73,16 @@
           </div>
           <div class="col-md-8">
             <div class="card-body">
-              <h5 class="card-title">{{cart.name}}</h5>
-              <p class="card-text"><small class="text-muted">R$ {{cart.price}}</small></p>
+              <h5 class="card-title">{{ owner_product.name }}</h5>
+              <p class="card-text"><small class="text-muted">R$ {{ owner_product.price }}</small></p>
             </div>
           </div>
         </div>
-      <div>
+      </div>
       {% endfor %}
-      </div>
-      <div class="dropdown mt-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-          Dropdown button
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
     </div>
   </div>
+  {% endif %}
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
