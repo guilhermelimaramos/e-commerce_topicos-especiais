@@ -10,6 +10,7 @@
     <h2 style="text-align: center">Products Available</h2>
     <p style="text-align: center">click on buy if you are interested </p>
     <hr>
+    <form method="POST">
     <div class="row row-cols-1 row-cols-md-4 g-4">
       {% for prod in product %}
         {% if prod.status == 'available' or prod.status == 'cart' %}
@@ -20,8 +21,8 @@
           <div class="card-body">
             <h5 class="card-title">{{prod.name}}</h5>
             <p class="card-text">{{prod.description}}</p>
-            <input id="add_cart_form" name="add_cart_form" type="hidden" value="{{prod.name}}">
-          {{add_cart_form.submit(class="btn btn-success btn-block ")}}
+            <input id="add_cart" name="add_cart" type="hidden" value="{{prod.name}}">
+            {{ add_cart_form.submit(class="btn btn-success btn-block ") }}
             <button data-bs-toggle="modal" data-bs-target="#exampleModal-{{prod.id}}" class="btn btn-outline-secondary">More Information</button>
           </div>
         </div>
@@ -29,6 +30,7 @@
         {% endif %}
       {% endfor %}
     </div>
+    </form>
   </div>
 </div>
 {% endblock %}

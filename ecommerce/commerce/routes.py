@@ -25,14 +25,14 @@ def page_products():
   add_cart_form = AddCartForm()
   if request.method == 'POST':
     # Buy product
-    buy_product = request.form.get('buy_product')
-    prod_obj = Product.query.filter_by(name=buy_product).first()
-    if prod_obj:
-      if current_user.purchase_available(prod_obj):
-        prod_obj.purchase(user=current_user)
-        flash(f'Congratulations! You bought {prod_obj.name} for R$ {prod_obj.price}', category='success')
-      else:
-        flash(f'Error: insufficient balance to buy {prod_obj.name}!', category='danger')
+    # buy_product = request.form.get('buy_product')
+    # prod_obj = Product.query.filter_by(name=buy_product).first()
+    # if prod_obj:
+    #   if current_user.purchase_available(prod_obj):
+    #     prod_obj.purchase(user=current_user)
+    #     flash(f'Congratulations! You bought {prod_obj.name} for R$ {prod_obj.price}', category='success')
+    #   else:
+    #     flash(f'Error: insufficient balance to buy {prod_obj.name}!', category='danger')
     # Sell product
     sell_product = request.form.get('sell_product')
     prod_obj_sell = Product.query.filter_by(name=sell_product).first()
@@ -43,16 +43,13 @@ def page_products():
       else:
         flash(f'Error: you cannot sell {prod_obj_sell.name}!', category='danger')
     # Add to cart
-    add_cart_product = request.form.get('add_cart_product')
+    add_cart_product = request.form.get('add_cart')
     prod_obj_add_cart = Product.query.filter_by(name=add_cart_product).first()
     if prod_obj_add_cart:
-      if current_user.purchase_available(prod_obj_add_cart):
-        prod_obj_add_cart.add_cart(user=current_user)
-        carts = Product.query.filter_by(status='cart')
-        render_template('base.html', carts=carts)
-        flash(f'Congratulations! You added {prod_obj_add_cart.name} to your cart!', category='success')
-      else:
-        flash(f'Error: insufficient balance to add {prod_obj_add_cart.name} to your cart!', category='danger')
+      prod_obj_add_cart.add_cart(user=current_user)
+      flash(f'Congratulations! You added {prod_obj_add_cart.name} to your cart!', category='success')
+    else:
+      flash(f'Error: insufficient balance to add {prod_obj_add_cart.name} to your cart!', category='danger')
     return redirect(url_for('page_products'))
   
   if request.method == 'GET':
@@ -125,9 +122,3 @@ def page_delete_account():
   current_user.delete_account()
   flash("Account deleted!", category="success")
   return redirect(url_for('page_home'))
-
-@app.route('/base', methods=['GET'])
-def page_base():
-  cart = Product.query.filter_by(status='cart')
-  # cart = owner.filter_by(status='cart')
-  return render_template('base.html', cart=cart)
