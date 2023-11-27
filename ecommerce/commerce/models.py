@@ -34,8 +34,8 @@ class User(db.Model, UserMixin):
   def pw_decript(self, pw_text):
     return bcrypt.check_password_hash(self.password, pw_text)
   
-  def purchase_available(self, item_obj):
-    return self.balance >= item_obj.price
+  def purchase_available(user, subtotal):
+    return user.balance >= subtotal
   
   def sell_available(self, item_obj):
     return self.id == item_obj.owner
@@ -64,9 +64,8 @@ class Product(db.Model):
   def __repr__(self):
     return f"Product {self.name}"
 
-  def purchase(self, user):
-    self.owner = user.id
-    user.balance -= self.price
+  def purchase(user, subtotal):
+    user.balance -= subtotal
     db.session.commit()
   
   def sell(self, user):
@@ -78,3 +77,7 @@ class Product(db.Model):
     self.status = 'cart'
     self.owner = user.id
     db.session.commit()
+  
+  def subtotal(self, user): 
+    for product in Product.query.filter_by(owner=user.id):
+      return sum(product.price)

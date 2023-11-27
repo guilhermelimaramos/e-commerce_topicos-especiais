@@ -80,6 +80,16 @@
         </div>
       </div>
       {% endfor %}
+      {% if subtotal != None %}
+      <hr>
+      <form method="POST">
+        Subtotal: R$ {{ subtotal }} 
+        <input id="buy_prod" name="buy_prod" type="hidden" value="{{ subtotal }}">
+        {{ buy_form.submit(class="btn btn-success btn-block ") }}
+      </form>
+      {% else %}
+      <div class="text-center">Cart is empty</div>
+      {% endif %}
     </div>
   </div>
   {% endif %}
