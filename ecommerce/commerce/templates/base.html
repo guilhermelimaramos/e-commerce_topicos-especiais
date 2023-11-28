@@ -98,8 +98,8 @@
           <li><a class="dropdown-item" href="#">Something else here</a></li>
         </ul>
       </div>
-=======
       {% for owner_product in owner_products %}
+        {% if owner_product.status == 'cart' %}
       <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
           <div class="col-md-4 text-center">
@@ -113,8 +113,26 @@
           </div>
         </div>
       </div>
+        {% endif %}
       {% endfor %}
->>>>>>> d3cc9f143feca13a190950bc6515b22481ce6769
+
+      {% if subtotal > 0 %}
+      <hr>
+
+      <div>
+        <form method="POST">
+        <h6>Subtotal: R$ {{ subtotal }}</h6>
+        <a href="{{url_for('page_confirm_purchase')}}">
+          <button type="button" class="btn btn-success m-1 w-25 " value="{{ subtotal }}">Buy</button>
+        </a>
+          <input id="remove_all" name="remove_all" type="hidden" class="text-center">
+          {{ remove_all_form.submit(class="btn btn-danger btn-block m-1 w-25") }}
+        </form>
+      </div>
+        
+      {% else %}
+      <div class="text-center">Cart is empty</div>
+      {% endif %}
     </div>
   </div>
   {% endif %}
