@@ -84,11 +84,18 @@
       {% endfor %}
       {% if subtotal > 0 %}
       <hr>
-      <form method="POST">
-        Subtotal: R$ {{ subtotal }} 
-        <input id="buy_prod" name="buy_prod" type="hidden" value="{{ subtotal }}">
-        {{ buy_form.submit(class="btn btn-success btn-block ") }}
-      </form>
+
+      <div>
+        <form method="POST">
+        <h6>Subtotal: R$ {{ subtotal }}</h6>
+        <a href="{{url_for('page_confirm_purchase')}}">
+          <button type="button" class="btn btn-success m-1 w-25 " value="{{ subtotal }}">Buy</button>
+        </a>
+          <input id="remove_all" name="remove_all" type="hidden" class="text-center">
+          {{ remove_all_form.submit(class="btn btn-danger btn-block m-1 w-25") }}
+        </form>
+      </div>
+        
       {% else %}
       <div class="text-center">Cart is empty</div>
       {% endif %}

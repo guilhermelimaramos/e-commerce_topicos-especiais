@@ -1,7 +1,7 @@
 from commerce import app
 from flask import render_template, redirect, url_for, flash, request
 from commerce.models import Product, User
-from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm
+from commerce.forms import SignUpForm, SignInForm, BuyProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm, RemoveAllCartForm
 from commerce import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -26,35 +26,24 @@ def page_home():
 @login_required
 def page_products():
   buy_form = BuyProductForm()
-  sell_form = SellProductForm()
   add_cart_form = AddCartForm()
+  remove_all_form = RemoveAllCartForm()
+
   if request.method == 'POST':
 
-    # Buy product
-    if request.form.get('buy_prod'):
-      subtotal = int(request.form.get('buy_prod'))
-      if User.purchase_available(user=current_user, subtotal=subtotal):
-        Product.purchase(user=current_user, subtotal=subtotal)
-        all_cart_product = Product.query.filter_by(owner=current_user.id, status='cart').all()
+    # Remove all product
+    if 'remove_all' in request.form:
+      all_cart_product = Product.query.filter_by(owner=current_user.id, status='cart').all()
+      if all_cart_product:
         for product in all_cart_product:
-          product.complete_purchase()
-        
-        flash(f'Congratulations! You bought all product per R$ {subtotal}', category='success')
+          product.remove_all_cart()
+        flash(f'You remove all products!', category='info')
       else:
-       flash(f'Error: insufficient balance to buy all products!', category='danger')
-
-    # Sell product
-    # sell_product = request.form.get('sell_product')
-    # prod_obj_sell = Product.query.filter_by(name=sell_product).first()
-    # if prod_obj_sell:
-    #   if current_user.sell_available(prod_obj_sell):
-    #     prod_obj_sell.sell(user=current_user)
-    #     flash(f'Congratulations! You sold {prod_obj_sell.name} for R$ {prod_obj_sell.price}', category='success')
-    #   else:
-    #     flash(f'Error: you cannot sell {prod_obj_sell.name}!', category='danger')
+        flash(f'Error: no products to remove!', category='danger')
+      return redirect(url_for('page_products'))
 
     # Add to cart
-    if request.form.get('add_cart'):
+    elif 'add_cart' in request.form:
       add_cart_product = request.form.get('add_cart')
       prod_obj_add_cart = Product.query.filter_by(name=add_cart_product).first()
       if prod_obj_add_cart:
@@ -63,7 +52,22 @@ def page_products():
       return redirect(url_for('page_products'))
   
   if request.method == 'GET':
-    return render_template('products.html', buy_form=buy_form, sell_form=sell_form, add_cart_form=add_cart_form)
+    return render_template('products.html', buy_form=buy_form, remove_all_form=remove_all_form, add_cart_form=add_cart_form)
+
+@app.route('/products/confirm_purchase', methods=['GET', 'POST'])
+@login_required
+def page_confirm_purchase():
+  subtotal_str = (db.session.query(db.func.sum(Product.price)).filter(Product.owner == current_user.id, Product.status == 'cart').scalar())
+  subtotal = int(subtotal_str) if subtotal_str else 0
+  if User.purchase_available(user=current_user, subtotal=subtotal):
+    Product.purchase(user=current_user, subtotal=subtotal)
+    all_cart_product = Product.query.filter_by(owner=current_user.id, status='cart').all()
+    for product in all_cart_product:
+      product.complete_purchase()
+    flash(f'Congratulations! You bought all product per R$ {subtotal}', category='success')
+  else:
+    flash(f'Error: insufficient balance to buy all products!', category='danger')
+  return redirect(url_for('page_products'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def page_signup():

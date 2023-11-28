@@ -85,4 +85,9 @@ class Product(db.Model):
   def complete_purchase(self):
     self.status = 'sold'
     db.session.commit()  
+
+  def remove_all_cart(self):
+    self.status = 'available'
+    self.owner = None
+    db.session.commit()
   
