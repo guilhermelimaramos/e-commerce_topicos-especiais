@@ -20,7 +20,7 @@
           <div class="card-body">
             <form method="POST">
             <h5 class="card-title">{{prod.name}}</h5>
-            <p class="card-text">{{prod.description}}</p>
+            <p class="card-text">R$ {{prod.price}}</p>
             <input id="add_cart" name="add_cart" type="hidden" value="{{prod.name}}">
             {{add_cart_form.submit(class="btn btn-success btn-block mb-2")}}
             </form>
