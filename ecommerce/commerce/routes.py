@@ -8,12 +8,14 @@ from flask_login import login_user, logout_user, login_required, current_user
 @app.context_processor
 def inject_products():
     buy_form = BuyProductForm()
-    product = Product.query.filter_by(owner=None)
+    product = Product.query.all()
     owner_products = None
     subtotal = 0
     if current_user.is_authenticated:
         owner_products = Product.query.filter_by(owner=current_user.id)
-        subtotal = (db.session.query(db.func.sum(Product.price)).filter(Product.owner == current_user.id).scalar())
+        subtotal = (db.session.query(db.func.sum(Product.price)).filter(Product.owner == current_user.id, Product.status == 'cart').scalar())
+        if subtotal is None:
+          subtotal = 0
     return dict(product=product, owner_products=owner_products, subtotal=subtotal, buy_form=buy_form)
 
 @app.route('/')
@@ -27,31 +29,38 @@ def page_products():
   sell_form = SellProductForm()
   add_cart_form = AddCartForm()
   if request.method == 'POST':
+
     # Buy product
-    subtotal = int(request.form.get('buy_prod'))
-    if User.purchase_available(user=current_user, subtotal=subtotal):
-      Product.purchase(user=current_user, subtotal=subtotal)
-      flash(f'Congratulations! You bought all product per R$ {subtotal}', category='success')
-    else:
-     flash(f'Error: insufficient balance to buy all products!', category='danger')
-    # Sell product
-    sell_product = request.form.get('sell_product')
-    prod_obj_sell = Product.query.filter_by(name=sell_product).first()
-    if prod_obj_sell:
-      if current_user.sell_available(prod_obj_sell):
-        prod_obj_sell.sell(user=current_user)
-        flash(f'Congratulations! You sold {prod_obj_sell.name} for R$ {prod_obj_sell.price}', category='success')
+    if request.form.get('buy_prod'):
+      subtotal = int(request.form.get('buy_prod'))
+      if User.purchase_available(user=current_user, subtotal=subtotal):
+        Product.purchase(user=current_user, subtotal=subtotal)
+        all_cart_product = Product.query.filter_by(owner=current_user.id, status='cart').all()
+        for product in all_cart_product:
+          product.complete_purchase()
+        
+        flash(f'Congratulations! You bought all product per R$ {subtotal}', category='success')
       else:
-        flash(f'Error: you cannot sell {prod_obj_sell.name}!', category='danger')
+       flash(f'Error: insufficient balance to buy all products!', category='danger')
+
+    # Sell product
+    # sell_product = request.form.get('sell_product')
+    # prod_obj_sell = Product.query.filter_by(name=sell_product).first()
+    # if prod_obj_sell:
+    #   if current_user.sell_available(prod_obj_sell):
+    #     prod_obj_sell.sell(user=current_user)
+    #     flash(f'Congratulations! You sold {prod_obj_sell.name} for R$ {prod_obj_sell.price}', category='success')
+    #   else:
+    #     flash(f'Error: you cannot sell {prod_obj_sell.name}!', category='danger')
 
     # Add to cart
-    add_cart_product = request.form.get('add_cart')
-    prod_obj_add_cart = Product.query.filter_by(name=add_cart_product).first()
-    if prod_obj_add_cart:
-      prod_obj_add_cart.add_cart(user=current_user)
-      flash(f'Congratulations! product successfully added !', category='success')
-    # Subtotal
-    return redirect(url_for('page_products'))
+    if request.form.get('add_cart'):
+      add_cart_product = request.form.get('add_cart')
+      prod_obj_add_cart = Product.query.filter_by(name=add_cart_product).first()
+      if prod_obj_add_cart:
+        prod_obj_add_cart.add_cart(user=current_user)
+        flash(f'Congratulations! product successfully added !', category='success')
+      return redirect(url_for('page_products'))
   
   if request.method == 'GET':
     return render_template('products.html', buy_form=buy_form, sell_form=sell_form, add_cart_form=add_cart_form)

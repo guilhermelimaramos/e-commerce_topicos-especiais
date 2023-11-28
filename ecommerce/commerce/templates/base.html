@@ -66,6 +66,7 @@
     </div>
     <div class="offcanvas-body">
       {% for owner_product in owner_products %}
+        {% if owner_product.status == 'cart' %}
       <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
           <div class="col-md-4 text-center">
@@ -79,8 +80,9 @@
           </div>
         </div>
       </div>
+        {% endif %}
       {% endfor %}
-      {% if subtotal != None %}
+      {% if subtotal > 0 %}
       <hr>
       <form method="POST">
         Subtotal: R$ {{ subtotal }} 

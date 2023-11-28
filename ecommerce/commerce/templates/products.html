@@ -12,7 +12,7 @@
     <hr>
     <div class="row row-cols-1 row-cols-md-4 g-4">
       {% for prod in product %}
-      {% if prod.status == 'available' or prod.status == 'cart' %}
+      {% if prod.status == 'available' %}
       {% include 'includes/modal_products.html' %}
       <div class="col">
         <div class="card bg-dark text-white">

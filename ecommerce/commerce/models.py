@@ -81,3 +81,8 @@ class Product(db.Model):
   def subtotal(self, user): 
     for product in Product.query.filter_by(owner=user.id):
       return sum(product.price)
+
+  def complete_purchase(self):
+    self.status = 'sold'
+    db.session.commit()  
+  
