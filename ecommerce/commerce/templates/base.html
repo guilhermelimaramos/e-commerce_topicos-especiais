@@ -1,186 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  <link rel="stylesheet" href="home.css">
-  <title>
-    {% block title %}
-
-    {% endblock %}
-  </title>
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#" style="padding-top:-2px">e-commerce</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav me-auto">
-          <a class="nav-link active" aria-current="page" href="{{url_for('page_home')}}">Home</a>
-          <a class="nav-link" href="{{url_for('page_products')}}">Products</a>
-        </div>
-        {% if current_user.is_authenticated %}
-        <div class="navbar-nav ms-auto">
-          <a class="btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-            <i type="button" class="fa-solid fa-cart-shopping" style="color: lawngreen; font-weight: bold; padding-top: 6px"></i>
-          </a>
-          <div class="dropdown">
-            <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-              Welcome, <span style="color: lawngreen; font-weight: bold;">{{ current_user.username }}</span>
-            </a>
-            {% include 'includes/modal_delete_account.html' %}
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-
-              <li><a class="dropdown-item" href="{{url_for('page_change_username')}}">Change username</a></li>
-              <li><a class="dropdown-item" href="{{url_for('page_change_password')}}">Change password</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a data-bs-toggle="modal" data-bs-target="#ModalDelete" class="dropdown-item" style="color: rgba(255, 0, 0, 0.548);">Delete account</a></li>
-            </ul>
-          </div>
-          <a class="nav-link" style="color: lawngreen; font-weight: bold;">
-            {{current_user.format_balance}}
-            <i class="fa-solid fa-coins"></i>
-          </a>
-          <a class="nav-link" href="{{url_for('page_logout')}}">Logout</a>
-        </div>
-
-        {% else %}
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="{{url_for('page_signin')}}">Sign in</a>
-          <a class="nav-link" href="{{url_for('page_signup')}}">Sign up</a>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </nav>
-
-  {% if current_user.is_authenticated %}
-  <div class="offcanvas offcanvas-start bg-black text-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
-      <button type="button" class="btn-close text-reset bg-white white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-<<<<<<< HEAD
-        {% if product %}
-        <div>
-          <h2>Products without owner:</h2>
-          <ul>
-            {% for prod in product %}
-              <li>{{ prod.name }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-
-        {% if owner_products %}
-        <div>
-          <h2>Your products:</h2>
-          <ul>
-            {% for prod in owner_products %}
-              <li>{{ prod.name }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-      </div>
-      <div class="dropdown mt-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-          Dropdown button
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="home.css" />
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" style="padding-top: -2px"
+          >e-commerce</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
-      {% for owner_product in owner_products %}
-        {% if owner_product.status == 'cart' %}
-      <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-          <div class="col-md-4 text-center">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU" alt="..." style="height: 100px; width: 100px;">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav me-auto">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href="{{url_for('page_home')}}"
+              >Home</a
+            >
+            <a class="nav-link" href="{{url_for('page_products')}}">Products</a>
           </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">{{ owner_product.name }}</h5>
-              <p class="card-text"><small class="text-muted">R$ {{ owner_product.price }}</small></p>
+          {% if current_user.is_authenticated %}
+          <div class="navbar-nav ms-auto">
+            <a
+              class="btn"
+              data-bs-toggle="offcanvas"
+              href="#offcanvasExample"
+              role="button"
+              aria-controls="offcanvasExample"
+            >
+              <i
+                type="button"
+                class="fa-solid fa-cart-shopping"
+                style="color: lawngreen; font-weight: bold; padding-top: 6px"
+              ></i>
+            </a>
+            <div class="dropdown">
+              <a
+                class="btn btn-dark dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Welcome,
+                <span style="color: lawngreen; font-weight: bold"
+                  >{{ current_user.username }}</span
+                >
+              </a>
+              {% include 'includes/modal_delete_account.html' %}
+              <ul
+                class="dropdown-menu dropdown-menu-dark"
+                aria-labelledby="dropdownMenuLink"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{url_for('page_change_username')}}"
+                    >Change username</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{url_for('page_change_password')}}"
+                    >Change password</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    data-bs-toggle="modal"
+                    data-bs-target="#ModalDelete"
+                    class="dropdown-item"
+                    style="color: rgba(255, 0, 0, 0.548)"
+                    >Delete account</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <a class="nav-link" style="color: lawngreen; font-weight: bold">
+              {{current_user.format_balance}}
+              <i class="fa-solid fa-coins"></i>
+            </a>
+            <a class="nav-link" href="{{url_for('page_logout')}}">Logout</a>
+          </div>
+
+          {% else %}
+          <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="{{url_for('page_signin')}}">Sign in</a>
+            <a class="nav-link" href="{{url_for('page_signup')}}">Sign up</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    {% if current_user.is_authenticated %}
+    <div
+      class="offcanvas offcanvas-start text-white"
+      tabindex="-1"
+      style="background-color: #313131"
+      id="offcanvasExample"
+      aria-labelledby="offcanvasExampleLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+          Shopping Cart
+        </h5>
+        <button
+          type="button"
+          class="btn-close text-reset bg-white white"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <h2>Your Products</h2>
+        {% for owner_product in owner_products %} {% if owner_product.status == 'cart' %}
+
+        <div
+          class="card mb-3 text-white"
+          style="max-width: 540px; background-color: #212529"
+        >
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU"
+                class="img-fluid rounded-start"
+                style="height: 100%; width: 100%; object-fit: cover"
+                alt="..."
+              />
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ owner_product.name }}</h5>
+                <p class="card-text">R$ {{ owner_product.price }},00</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-        {% endif %}
-      {% endfor %}
+        {% endif %} {% endfor %} {% if subtotal > 0 %}
+        <hr />
 
-      {% if subtotal > 0 %}
-      <hr>
-
-      <div>
-        <form method="POST">
-        <h6>Subtotal: R$ {{ subtotal }}</h6>
-        <a href="{{url_for('page_confirm_purchase')}}">
-          <button type="button" class="btn btn-success m-1 w-25 " value="{{ subtotal }}">Buy</button>
-        </a>
-          <input id="remove_all" name="remove_all" type="hidden" class="text-center">
+        <div>
+          <form method="POST">
+            <h6>Subtotal: R$ {{ subtotal }},00</h6>
+            <a
+              href="{{url_for('page_confirm_purchase')}}"
+              style="text-decoration-color: #313131"
+            >
+              <button
+                type="button"
+                class="btn btn-success m-1 w-25"
+                value="{{ subtotal }}"
+                href="{{url_for('page_confirm_purchase')}}"
+              >
+                Buy
+              </button>
+            </a>
+            <input id="remove_all" name="remove_all" type="hidden" class="text-center">
           {{ remove_all_form.submit(class="btn btn-danger btn-block m-1 w-25") }}
         </form>
-      </div>
-        
-      {% else %}
-      <div class="text-center">Cart is empty</div>
-      {% endif %}
-    </div>
-  </div>
-  {% endif %}
-
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="text-center alert alert-{{category}} alert-dismissible fade show" role="alert">
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close">
-          </button>
-          {{message}}
         </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-  {% block content %}
 
-  {% endblock %}
-  
-  <style>
-    .btn-close.white {
-      --bs-close-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 16 16' fill='white' stroke='white' class='bi bi-x' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586l6.293-6.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
-    }
-  </style>
-  <script>
-    $(document).ready(function(){
-        $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+        {% else %}
+        <div class="text-center">Cart is empty</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %} {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %} {% for category, message in messages %}
+    <div
+      class="text-center alert alert-{{category}} alert-dismissible fade show"
+      role="alert"
+    >
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+      {{message}}
+    </div>
+    {% endfor %} {% endif %} {% endwith %} {% block content %} {% endblock %}
+
+    <style>
+      .btn-close.white {
+        --bs-close-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 16 16' fill='white' stroke='white' class='bi bi-x' xmlns:xlink='http://www.w3.org/1999/xlink' overflow='visible'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586l6.293-6.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+      }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $(".alert")
+          .fadeTo(2000, 500)
+          .slideUp(500, function () {
             $(".alert").slideUp(500);
-        });
-    });
+          });
+      });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/63d5661cb6.js" crossorigin="anonymous"></script>
-  <style>
-    body {
-      background-color: #313131;
-      color: white;
-    }
-    img {
-      height: 150px;
-      width: 150px;
-    }
-  </style>
-
-</body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/63d5661cb6.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        background-color: #313131;
+        color: white;
+      }
+      img {
+        height: 150px;
+        width: 150px;
+      }
+    </style>
+  </body>
 </html>
