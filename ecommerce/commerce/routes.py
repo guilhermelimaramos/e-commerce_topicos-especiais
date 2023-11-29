@@ -123,12 +123,14 @@ def page_change_username():
 @login_required
 def page_change_password():
   form = ChangePasswordForm()
-  if form.validate_on_submit():
-    current_user.change_password(new_password=form.password1.data)
-    flash("Password changed!", category="success")
-    return redirect(url_for('page_home'))
-  else:
-    flash("Error: passwords do not match!", category="danger")
+  if request.method == 'POST':
+    print(form.password1.data, form.password2.data)
+    if form.password1.data == form.password2.data:
+      current_user.change_password(new_password=form.password1.data)
+      flash("Password changed!", category="success")
+      return redirect(url_for('page_home'))
+    else:
+      flash("Error: passwords do not match!", category="danger")
   return render_template('change_password.html', form=form)
 
 @app.route('/delete_account', methods=['GET', 'POST', 'DELETE'])
