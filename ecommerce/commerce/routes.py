@@ -1,5 +1,5 @@
 from commerce import app
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, jsonify
 from commerce.models import Product, User
 from commerce.forms import SignUpForm, SignInForm, BuyProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm, RemoveAllCartForm
 from commerce import db
@@ -20,7 +20,8 @@ def inject_products():
 
 @app.route('/')
 def page_home():
-  return render_template('home.html')
+  remove_all_form = RemoveAllCartForm()
+  return render_template('home.html', remove_all_form=remove_all_form)
 
 @app.route('/products', methods=['GET', 'POST'])
 @login_required
@@ -119,18 +120,47 @@ def page_change_username():
   return render_template('change_username.html', form=form)
 
 @app.route('/change_password', methods=['GET', 'POST', 'PUT'])
+@login_required
 def page_change_password():
   form = ChangePasswordForm()
-  if form.validate_on_submit():
-    current_user.change_password(new_password=form.password1.data)
-    flash("Password changed!", category="success")
-    return redirect(url_for('page_home'))
-  else:
-    flash("Error: passwords do not match!", category="danger")
+  if request.method == 'POST':
+    print(form.password1.data, form.password2.data)
+    if form.password1.data == form.password2.data:
+      current_user.change_password(new_password=form.password1.data)
+      flash("Password changed!", category="success")
+      return redirect(url_for('page_home'))
+    else:
+      flash("Error: passwords do not match!", category="danger")
   return render_template('change_password.html', form=form)
 
 @app.route('/delete_account', methods=['GET', 'POST', 'DELETE'])
+@login_required
 def page_delete_account():
   current_user.delete_account()
   flash("Account deleted!", category="success")
   return redirect(url_for('page_home'))
+
+@app.route('/products/order_product', methods=['GET'])
+@login_required
+def page_order_product():
+  order_product = Product.query.filter_by(owner=current_user.id, status='sold').all()
+  return render_template('order_product.html', order_product=order_product)
+
+@app.route('/add_product', methods=['GET', 'POST'])
+def add_product():
+  try:
+    data_json = request.get_json()
+    new_product = Product(name=data_json['name'], price=data_json['price'], bar_code=data_json['bar_code'], description=data_json['description'])
+    db.session.add(new_product)
+    db.session.commit()
+    return jsonify({"message": "added product with success"}), 201
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+@app.route('/products/remove_cart')
+def remove_cart():
+  prod_obj_remove_cart = Product.query.filter_by(owner=current_user.id, status='cart').first()
+  if prod_obj_remove_cart:
+    prod_obj_remove_cart.remove_cart()
+    flash(f'Product removed from cart!', category='info')
+  return redirect(url_for('page_products'))
