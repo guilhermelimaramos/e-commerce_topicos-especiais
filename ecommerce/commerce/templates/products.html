@@ -16,7 +16,9 @@ content %}
           />
           <div class="card-body">
             <form method="POST">
-              <h5 class="card-title">{{prod.name}}</h5>
+              <h5 class="card-title" style="overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1;">
+                {{ prod.name }}
+              </h5>
               <p class="card-text">R$ {{prod.price}},00</p>
               <input
                 id="add_cart"

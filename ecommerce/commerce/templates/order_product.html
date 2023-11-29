@@ -10,19 +10,24 @@
   <div class="w-full">
     <h2 style="text-align: center">Ordered Products</h2>
     <hr>
-    <div style="margin: auto;">
+    <div class="row row-cols-1 row-cols-md-4 g-4">
       {% for order in order_product  %}
-      <div class="card text-center ms-5 me-5 mb-4 text-bg-secondary w-50">
-        <div class="card-header text-bg-success">
-          Product
-        </div>
-        <div class="card-body" style="background-color: #313131c4;">
-          <h5 class="card-title">Product: {{ order.name }}</h5>
-          <p class="card-text">{{ order.description }}</p>
-          
-        </div>
-        <div class="card-footer text-bg-success" style="font-weight: bold;">
-          pick up this product in store
+      <div class="col">
+        <div class="card text-center ms-5 me-5 mb-4 text-bg-secondary">
+          <div class="card-header" style="background-color: #212122;">
+            Product
+          </div>
+          <div class="card-body" style="background-color: #313131c4;">
+            <h5 class="card-title" style="overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1;">
+              {{ order.name }}
+            </h5>
+            <p class="card-text" style="overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1;">
+              {{ order.description }}
+            </p>
+          </div>
+          <div class="card-footer text-bg-success" style="font-weight: bold;">
+            pick up this product in store
+          </div>
         </div>
       </div>
       {% endfor %}
@@ -31,3 +36,4 @@
 
 </div>
 {% endblock %}
+
