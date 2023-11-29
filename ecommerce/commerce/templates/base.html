@@ -35,6 +35,8 @@
             {% include 'includes/modal_delete_account.html' %}
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
 
+              <li><a class="dropdown-item" href="{{url_for('page_order_product')}}">Order Product</a></li>
+
               <li><a class="dropdown-item" href="{{url_for('page_change_username')}}">Change username</a></li>
               <li><a class="dropdown-item" href="{{url_for('page_change_password')}}">Change password</a></li>
               <li><hr class="dropdown-divider"></li>

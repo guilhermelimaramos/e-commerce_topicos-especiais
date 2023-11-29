@@ -120,6 +120,7 @@ def page_change_username():
   return render_template('change_username.html', form=form)
 
 @app.route('/change_password', methods=['GET', 'POST', 'PUT'])
+@login_required
 def page_change_password():
   form = ChangePasswordForm()
   if form.validate_on_submit():
@@ -131,7 +132,14 @@ def page_change_password():
   return render_template('change_password.html', form=form)
 
 @app.route('/delete_account', methods=['GET', 'POST', 'DELETE'])
+@login_required
 def page_delete_account():
   current_user.delete_account()
   flash("Account deleted!", category="success")
   return redirect(url_for('page_home'))
+
+@app.route('/products/order_product', methods=['GET'])
+@login_required
+def page_order_product():
+  order_product = Product.query.filter_by(owner=current_user.id, status='sold').all()
+  return render_template('order_product.html', order_product=order_product)
