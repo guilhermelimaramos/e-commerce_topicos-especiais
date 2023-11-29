@@ -1,5 +1,5 @@
 from commerce import app
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, jsonify
 from commerce.models import Product, User
 from commerce.forms import SignUpForm, SignInForm, BuyProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm, RemoveAllCartForm
 from commerce import db
@@ -143,3 +143,14 @@ def page_delete_account():
 def page_order_product():
   order_product = Product.query.filter_by(owner=current_user.id, status='sold').all()
   return render_template('order_product.html', order_product=order_product)
+
+@app.route('/add_product', methods=['GET', 'POST'])
+def add_product():
+  try:
+    data_json = request.get_json()
+    new_product = Product(name=data_json['name'], price=data_json['price'], bar_code=data_json['bar_code'], description=data_json['description'])
+    db.session.add(new_product)
+    db.session.commit()
+    return jsonify({"message": "added product with success"}), 201
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
