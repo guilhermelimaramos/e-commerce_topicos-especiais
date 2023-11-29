@@ -35,6 +35,8 @@
             {% include 'includes/modal_delete_account.html' %}
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
 
+              <li><a class="dropdown-item" href="{{url_for('page_order_product')}}">Order Product</a></li>
+
               <li><a class="dropdown-item" href="{{url_for('page_change_username')}}">Change username</a></li>
               <li><a class="dropdown-item" href="{{url_for('page_change_password')}}">Change password</a></li>
               <li><hr class="dropdown-divider"></li>
@@ -58,40 +60,53 @@
     </div>
   </nav>
 
+  {% if current_user.is_authenticated %}
   <div class="offcanvas offcanvas-start bg-black text-white" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
       <button type="button" class="btn-close text-reset bg-white white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      {% for cart in carts  %}
+      {% for owner_product in owner_products %}
+        {% if owner_product.status == 'cart' %}
       <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
-          <div class="col-md-4 text-center">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU" alt="..." style="height: 100px; width: 100px;">
+          <div class="col-md-4 m-1">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU" alt="..." style="height: 100px; width: 130px;">
           </div>
-          <div class="col-md-8">
+          <div class="col-md-6">
             <div class="card-body">
-              <h5 class="card-title">{{cart.name}}</h5>
-              <p class="card-text"><small class="text-muted">R$ {{cart.price}}</small></p>
+              <h5 class="card-title">{{ owner_product.name }}</h5>
+              <p class="card-text"><small class="text-muted">R$ {{ owner_product.price }}</small></p>
             </div>
           </div>
+          <div class="col-md-1 mt-3">
+            <a href="{{url_for('remove_cart')}}"><i class="fa-regular fa-trash-can fs-3 mt-4" style="color: #ff0000;"></i></a>
+          </div>
         </div>
-      <div>
+      </div>
+        {% endif %}
       {% endfor %}
+      {% if subtotal > 0 %}
+      <hr>
+
+      <div>
+        <form method="POST">
+        <h6>Subtotal: R$ {{ subtotal }}</h6>
+        <a href="{{url_for('page_confirm_purchase')}}">
+          <button type="button" class="btn btn-success m-1 w-25 " value="{{ subtotal }}">Buy</button>
+        </a>
+          <input id="remove_all" name="remove_all" type="hidden" class="text-center">
+          {{ remove_all_form.submit(class="btn btn-danger btn-block m-1 w-25") }}
+        </form>
       </div>
-      <div class="dropdown mt-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-          Dropdown button
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
+        
+      {% else %}
+      <div class="text-center">Cart is empty</div>
+      {% endif %}
     </div>
   </div>
+  {% endif %}
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}

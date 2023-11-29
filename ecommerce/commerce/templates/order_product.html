@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Order Product
+{% endblock %}
+
+{% block content %}
+
+<div class="" style="margin-top: 20px; padding-left: 20px; padding-right: 20px">
+  <div class="w-full">
+    <h2 style="text-align: center">Order Products</h2>
+    <hr>
+    <div style="margin: auto;">
+      {% for order in order_product  %}
+      <div class="card text-center ms-5 me-5 mb-4 text-bg-secondary w-50">
+        <div class="card-header text-bg-success">
+          Product
+        </div>
+        <div class="card-body" style="background-color: #313131c4;">
+          <h5 class="card-title">Product: {{ order.name }}</h5>
+          <p class="card-text">{{ order.description }}</p>
+          
+        </div>
+        <div class="card-footer text-bg-success" style="font-weight: bold;">
+          pick up this product in store
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

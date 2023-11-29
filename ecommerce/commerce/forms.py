@@ -26,8 +26,8 @@ class SignInForm(FlaskForm):
 class BuyProductForm(FlaskForm):
   submit = SubmitField(label='Buy')
 
-class SellProductForm(FlaskForm):
-  submit = SubmitField(label='Sell')
+class RemoveAllCartForm(FlaskForm):
+  submit = SubmitField(label='Remove')
 
 class ChangeUsernameForm(FlaskForm):
   username = StringField(label='New username:', validators=[Length(min=3, max=30), DataRequired()])
@@ -40,3 +40,4 @@ class ChangePasswordForm(FlaskForm):
 
 class AddCartForm(FlaskForm):
   submit = SubmitField(label='Add to cart')
+

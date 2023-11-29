@@ -1,64 +1,74 @@
 from commerce import app
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, jsonify
 from commerce.models import Product, User
-from commerce.forms import SignUpForm, SignInForm, BuyProductForm, SellProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm
+from commerce.forms import SignUpForm, SignInForm, BuyProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm, RemoveAllCartForm
 from commerce import db
 from flask_login import login_user, logout_user, login_required, current_user
 
 @app.context_processor
 def inject_products():
-    product = Product.query.filter_by(owner=None)
+    buy_form = BuyProductForm()
+    product = Product.query.all()
     owner_products = None
+    subtotal = 0
     if current_user.is_authenticated:
         owner_products = Product.query.filter_by(owner=current_user.id)
-    return dict(product=product, owner_products=owner_products)
+        subtotal = (db.session.query(db.func.sum(Product.price)).filter(Product.owner == current_user.id, Product.status == 'cart').scalar())
+        if subtotal is None:
+          subtotal = 0
+    return dict(product=product, owner_products=owner_products, subtotal=subtotal, buy_form=buy_form)
 
 @app.route('/')
 def page_home():
-  return render_template('home.html')
+  remove_all_form = RemoveAllCartForm()
+  return render_template('home.html', remove_all_form=remove_all_form)
 
 @app.route('/products', methods=['GET', 'POST'])
 @login_required
 def page_products():
   buy_form = BuyProductForm()
-  sell_form = SellProductForm()
   add_cart_form = AddCartForm()
+  remove_all_form = RemoveAllCartForm()
+
   if request.method == 'POST':
-    # Buy product
-    buy_product = request.form.get('buy_product')
-    prod_obj = Product.query.filter_by(name=buy_product).first()
-    if prod_obj:
-      if current_user.purchase_available(prod_obj):
-        prod_obj.purchase(user=current_user)
-        flash(f'Congratulations! You bought {prod_obj.name} for R$ {prod_obj.price}', category='success')
+
+    # Remove all product
+    if 'remove_all' in request.form:
+      all_cart_product = Product.query.filter_by(owner=current_user.id, status='cart').all()
+      if all_cart_product:
+        for product in all_cart_product:
+          product.remove_all_cart()
+        flash(f'You remove all products!', category='info')
       else:
-        flash(f'Error: insufficient balance to buy {prod_obj.name}!', category='danger')
-    # Sell product
-    sell_product = request.form.get('sell_product')
-    prod_obj_sell = Product.query.filter_by(name=sell_product).first()
-    if prod_obj_sell:
-      if current_user.sell_available(prod_obj_sell):
-        prod_obj_sell.sell(user=current_user)
-        flash(f'Congratulations! You sold {prod_obj_sell.name} for R$ {prod_obj_sell.price}', category='success')
-      else:
-        flash(f'Error: you cannot sell {prod_obj_sell.name}!', category='danger')
+        flash(f'Error: no products to remove!', category='danger')
+      return redirect(url_for('page_products'))
+
     # Add to cart
-    add_cart_product = request.form.get('add_cart_product')
-    prod_obj_add_cart = Product.query.filter_by(name=add_cart_product).first()
-    if prod_obj_add_cart:
-      if current_user.purchase_available(prod_obj_add_cart):
+    elif 'add_cart' in request.form:
+      add_cart_product = request.form.get('add_cart')
+      prod_obj_add_cart = Product.query.filter_by(name=add_cart_product).first()
+      if prod_obj_add_cart:
         prod_obj_add_cart.add_cart(user=current_user)
-        carts = Product.query.filter_by(status='cart')
-        render_template('base.html', carts=carts)
-        flash(f'Congratulations! You added {prod_obj_add_cart.name} to your cart!', category='success')
-      else:
-        flash(f'Error: insufficient balance to add {prod_obj_add_cart.name} to your cart!', category='danger')
-    return redirect(url_for('page_products'))
+        flash(f'Congratulations! product successfully added !', category='success')
+      return redirect(url_for('page_products'))
   
   if request.method == 'GET':
-    product = Product.query.filter_by(owner=None)
-    owner_products = Product.query.filter_by(owner=current_user.id)
-    return render_template('products.html', product=product, buy_form=buy_form, owner_products=owner_products, sell_form=sell_form, add_cart_form=add_cart_form)
+    return render_template('products.html', buy_form=buy_form, remove_all_form=remove_all_form, add_cart_form=add_cart_form)
+
+@app.route('/products/confirm_purchase', methods=['GET', 'POST'])
+@login_required
+def page_confirm_purchase():
+  subtotal_str = (db.session.query(db.func.sum(Product.price)).filter(Product.owner == current_user.id, Product.status == 'cart').scalar())
+  subtotal = int(subtotal_str) if subtotal_str else 0
+  if User.purchase_available(user=current_user, subtotal=subtotal):
+    Product.purchase(user=current_user, subtotal=subtotal)
+    all_cart_product = Product.query.filter_by(owner=current_user.id, status='cart').all()
+    for product in all_cart_product:
+      product.complete_purchase()
+    flash(f'Congratulations! You bought all product per R$ {subtotal}', category='success')
+  else:
+    flash(f'Error: insufficient balance to buy all products!', category='danger')
+  return redirect(url_for('page_products'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def page_signup():
@@ -110,24 +120,47 @@ def page_change_username():
   return render_template('change_username.html', form=form)
 
 @app.route('/change_password', methods=['GET', 'POST', 'PUT'])
+@login_required
 def page_change_password():
   form = ChangePasswordForm()
-  if form.validate_on_submit():
-    current_user.change_password(new_password=form.password1.data)
-    flash("Password changed!", category="success")
-    return redirect(url_for('page_home'))
-  else:
-    flash("Error: passwords do not match!", category="danger")
+  if request.method == 'POST':
+    print(form.password1.data, form.password2.data)
+    if form.password1.data == form.password2.data:
+      current_user.change_password(new_password=form.password1.data)
+      flash("Password changed!", category="success")
+      return redirect(url_for('page_home'))
+    else:
+      flash("Error: passwords do not match!", category="danger")
   return render_template('change_password.html', form=form)
 
 @app.route('/delete_account', methods=['GET', 'POST', 'DELETE'])
+@login_required
 def page_delete_account():
   current_user.delete_account()
   flash("Account deleted!", category="success")
   return redirect(url_for('page_home'))
 
-@app.route('/base', methods=['GET'])
-def page_base():
-  cart = Product.query.filter_by(status='cart')
-  # cart = owner.filter_by(status='cart')
-  return render_template('base.html', cart=cart)
+@app.route('/products/order_product', methods=['GET'])
+@login_required
+def page_order_product():
+  order_product = Product.query.filter_by(owner=current_user.id, status='sold').all()
+  return render_template('order_product.html', order_product=order_product)
+
+@app.route('/add_product', methods=['GET', 'POST'])
+def add_product():
+  try:
+    data_json = request.get_json()
+    new_product = Product(name=data_json['name'], price=data_json['price'], bar_code=data_json['bar_code'], description=data_json['description'])
+    db.session.add(new_product)
+    db.session.commit()
+    return jsonify({"message": "added product with success"}), 201
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+@app.route('/products/remove_cart')
+def remove_cart():
+  prod_obj_remove_cart = Product.query.filter_by(owner=current_user.id, status='cart').first()
+  if prod_obj_remove_cart:
+    prod_obj_remove_cart.remove_cart()
+    flash(f'Product removed from cart!', category='info')
+  return redirect(url_for('page_products'))
