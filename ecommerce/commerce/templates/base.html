@@ -73,6 +73,13 @@
                 class="dropdown-menu dropdown-menu-dark"
                 aria-labelledby="dropdownMenuLink"
               >
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="{{url_for('page_order_product')}}"
+                  >Ordered products</a
+                >
+              </li>
                 <li>
                   <a
                     class="dropdown-item"
@@ -144,7 +151,7 @@
           style="max-width: 540px; background-color: #212529"
         >
           <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaGCTqxe6ENdKFqk158JSUgmQSmgXG1s8ZHdTFpD1hJOUcHsE2JPh-zZ8Gc-JsnS6GzQ&usqp=CAU"
                 class="img-fluid rounded-start"
@@ -152,15 +159,15 @@
                 alt="..."
               />
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
               <div class="card-body">
                 <h5 class="card-title">{{ owner_product.name }}</h5>
                 <p class="card-text">R$ {{ owner_product.price }},00</p>
               </div>
             </div>
-          </div>
-          <div class="col-md-1 mt-3">
-            <a href="{{url_for('remove_cart')}}"><i class="fa-regular fa-trash-can fs-3 mt-4" style="color: #ff0000;"></i></a>
+            <div class="col-md-3 mx-auto mt-1">
+              <a href="{{url_for('remove_cart')}}"><i class="fa-regular fa-trash-can fs-3 mt-4" style="color: #ff0000;"></i></a>
+            </div>
           </div>
         </div>
         {% endif %} {% endfor %} {% if subtotal > 0 %}

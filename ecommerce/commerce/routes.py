@@ -8,6 +8,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 @app.context_processor
 def inject_products():
     buy_form = BuyProductForm()
+    remove_all_form = RemoveAllCartForm()
     product = Product.query.all()
     owner_products = None
     subtotal = 0
@@ -16,7 +17,7 @@ def inject_products():
         subtotal = (db.session.query(db.func.sum(Product.price)).filter(Product.owner == current_user.id, Product.status == 'cart').scalar())
         if subtotal is None:
           subtotal = 0
-    return dict(product=product, owner_products=owner_products, subtotal=subtotal, buy_form=buy_form)
+    return dict(product=product, owner_products=owner_products, subtotal=subtotal, buy_form=buy_form, remove_all_form=remove_all_form)
 
 @app.route('/')
 def page_home():
