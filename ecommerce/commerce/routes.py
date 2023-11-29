@@ -154,3 +154,11 @@ def add_product():
     return jsonify({"message": "added product with success"}), 201
   except Exception as e:
     return jsonify({"error": str(e)}), 500
+
+@app.route('/products/remove_cart')
+def remove_cart():
+  prod_obj_remove_cart = Product.query.filter_by(owner=current_user.id, status='cart').first()
+  if prod_obj_remove_cart:
+    prod_obj_remove_cart.remove_cart()
+    flash(f'Product removed from cart!', category='info')
+  return redirect(url_for('page_products'))

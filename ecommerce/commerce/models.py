@@ -91,3 +91,7 @@ class Product(db.Model):
     self.owner = None
     db.session.commit()
   
+  def remove_cart(self):
+    self.status = 'available'
+    db.session.commit()
+  
