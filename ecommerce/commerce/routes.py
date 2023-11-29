@@ -20,7 +20,8 @@ def inject_products():
 
 @app.route('/')
 def page_home():
-  return render_template('home.html')
+  remove_all_form = RemoveAllCartForm()
+  return render_template('home.html', remove_all_form=remove_all_form)
 
 @app.route('/products', methods=['GET', 'POST'])
 @login_required
