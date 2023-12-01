@@ -1,0 +1,114 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "Guilherme",
+            "email": "glimaramso013@gmail.com",
+            "pw_hash": "123456",
+            "balance": 1000000
+        },
+        {
+            "id": 2,
+            "username": "Mavi",
+            "email": "mavi@gmail.com",
+            "pw_hash": "123456",
+            "balance": 5000
+        },
+        {
+            "id": 3,
+            "username": "Ciro",
+            "email": "ciro@email.com",
+            "pw_hash": "123456",
+            "balance": 5000
+        },
+        {
+            "id": 4,
+            "username": "gui",
+            "email": "guilherme@email.com",
+            "pw_hash": "123456",
+            "balance": 5000
+        },
+        {
+            "id": 5,
+            "username": "teste",
+            "email": "glimaramos013@gmail.com",
+            "pw_hash": "123456",
+            "balance": 5000
+        },
+        {
+            "id": 6,
+            "username": "Junin",
+            "email": "junin@junin.com",
+            "pw_hash": "$2b$12$DFxJii9H.82qeMbAgnTmLON4PMFoiE74pXtMpD7FH0l6/fUx9v2a.",
+            "balance": 10000
+        },
+        {
+            "id": 7,
+            "username": "Lima",
+            "email": "lima@gmail.com",
+            "pw_hash": "$2b$12$wr.Sq8gHfu9ofIt56Kzs9.WRdAHwX8lWdnTWi63wJMcqhjRoMiUPq",
+            "balance": 50000
+        },
+        {
+            "id": 8,
+            "username": "euu",
+            "email": "eu@hotmail.com",
+            "pw_hash": "$2b$12$6jYr8pFof97VWj./8XPmNeSlvKM1/3dX69A4ECLvpdOLhvu0KZpKu",
+            "balance": 5000
+        },
+        {
+            "id": 9,
+            "username": "aiai",
+            "email": "aiai@hotmail.com",
+            "pw_hash": "$2b$12$dMSQszNHy5RgUKvsIwawa.QwwT14PT9dT3h2kxhG6g7mmvxvRfJFe",
+            "balance": 4150
+        }
+    ],
+    "products": [
+        {
+            "id": 1,
+            "name": "Mouse",
+            "price": 100,
+            "bar_code": "3157187",
+            "description": "Mouse wireless 1600dpi",
+            "owner": 9,
+            "status": "sold"
+        },
+        {
+            "id": 2,
+            "name": "RAM Memory",
+            "price": 250,
+            "bar_code": "2371916",
+            "description": "16GB RAM DDR4",
+            "owner": 9,
+            "status": "sold"
+        },
+        {
+            "id": 3,
+            "name": "Keybord",
+            "price": 300,
+            "bar_code": "2961691",
+            "description": "Teclado Gamer Mec\u00e2nico",
+            "owner": 9,
+            "status": "sold"
+        },
+        {
+            "id": 4,
+            "name": "Iphone 13",
+            "price": 5000,
+            "bar_code": "57275",
+            "description": "4GB RAM e 256GB Mem\u00f3ria",
+            "owner": 9,
+            "status": "cart"
+        },
+        {
+            "id": 5,
+            "name": "Headset",
+            "price": 200,
+            "bar_code": "342565",
+            "description": "Headset Gamer RGB com microfone",
+            "owner": 9,
+            "status": "sold"
+        }
+    ]
+}

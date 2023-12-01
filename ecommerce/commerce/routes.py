@@ -1,9 +1,14 @@
+import os
+import json
+import zipfile
 from commerce import app
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import after_this_request, render_template, redirect, url_for, flash, request, jsonify, send_file
 from commerce.models import Product, User
 from commerce.forms import SignUpForm, SignInForm, BuyProductForm, ChangeUsernameForm, ChangePasswordForm, AddCartForm, RemoveAllCartForm
 from commerce import db
 from flask_login import login_user, logout_user, login_required, current_user
+
+
 
 @app.context_processor
 def inject_products():
@@ -169,3 +174,28 @@ def remove_cart():
 @app.route('/about')
 def page_about():
   return render_template('about.html')
+
+@app.route('/export_data')
+def export_data():
+  data_user = User.query.all()
+  data_product = Product.query.all()
+
+  data_json = {
+    'users': [{'id': user.id, 'username': user.username, 'email': user.email, 'pw_hash': user.password, 'balance': user.balance} for user in data_user],
+    'products': [{'id': product.id, 'name': product.name, 'price': product.price, 'bar_code': product.bar_code, 'description': product.description, 'owner': product.owner, 'status': product.status} for product in data_product]
+  }
+
+  temp_file_path = 'data.json'
+  zip_file_path = 'data_export.zip'
+  
+  try:
+    with open(temp_file_path, 'w') as file:
+      json.dump(data_json, file, indent=4)
+    
+    with zipfile.ZipFile(zip_file_path, 'w') as zip_file:
+      zip_file.write(temp_file_path, arcname='data.json')
+      
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+  return send_file(zip_file_path, as_attachment=True)
