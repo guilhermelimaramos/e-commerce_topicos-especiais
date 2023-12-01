@@ -1,67 +1,18 @@
 {
     "users": [
         {
-            "id": 1,
-            "username": "Guilherme",
-            "email": "glimaramso013@gmail.com",
-            "pw_hash": "123456",
-            "balance": 1000000
-        },
-        {
-            "id": 2,
-            "username": "Mavi",
-            "email": "mavi@gmail.com",
-            "pw_hash": "123456",
-            "balance": 5000
-        },
-        {
-            "id": 3,
-            "username": "Ciro",
-            "email": "ciro@email.com",
-            "pw_hash": "123456",
-            "balance": 5000
-        },
-        {
-            "id": 4,
-            "username": "gui",
-            "email": "guilherme@email.com",
-            "pw_hash": "123456",
-            "balance": 5000
-        },
-        {
-            "id": 5,
-            "username": "teste",
-            "email": "glimaramos013@gmail.com",
-            "pw_hash": "123456",
-            "balance": 5000
-        },
-        {
             "id": 6,
             "username": "Junin",
             "email": "junin@junin.com",
-            "pw_hash": "$2b$12$DFxJii9H.82qeMbAgnTmLON4PMFoiE74pXtMpD7FH0l6/fUx9v2a.",
-            "balance": 10000
+            "pw_hash": "$2b$12$g9NqvS0.9Zxx8Alihti5FeREnstdNJbtJBXEoSuwB2D/2Ble1kVc2",
+            "balance": 2000
         },
         {
             "id": 7,
             "username": "Lima",
             "email": "lima@gmail.com",
-            "pw_hash": "$2b$12$wr.Sq8gHfu9ofIt56Kzs9.WRdAHwX8lWdnTWi63wJMcqhjRoMiUPq",
-            "balance": 50000
-        },
-        {
-            "id": 8,
-            "username": "euu",
-            "email": "eu@hotmail.com",
-            "pw_hash": "$2b$12$6jYr8pFof97VWj./8XPmNeSlvKM1/3dX69A4ECLvpdOLhvu0KZpKu",
-            "balance": 5000
-        },
-        {
-            "id": 9,
-            "username": "aiai",
-            "email": "aiai@hotmail.com",
-            "pw_hash": "$2b$12$dMSQszNHy5RgUKvsIwawa.QwwT14PT9dT3h2kxhG6g7mmvxvRfJFe",
-            "balance": 4150
+            "pw_hash": "$2b$12$Xrhdxdbswo4m8ae5wBwkVusecXFyj58D1JZtSgYoLlmkXaDQdUrH2",
+            "balance": 42500
         }
     ],
     "products": [
@@ -71,8 +22,8 @@
             "price": 100,
             "bar_code": "3157187",
             "description": "Mouse wireless 1600dpi",
-            "owner": 9,
-            "status": "sold"
+            "owner": 7,
+            "status": "available"
         },
         {
             "id": 2,
@@ -80,7 +31,7 @@
             "price": 250,
             "bar_code": "2371916",
             "description": "16GB RAM DDR4",
-            "owner": 9,
+            "owner": 7,
             "status": "sold"
         },
         {
@@ -89,7 +40,7 @@
             "price": 300,
             "bar_code": "2961691",
             "description": "Teclado Gamer Mec\u00e2nico",
-            "owner": 9,
+            "owner": 7,
             "status": "sold"
         },
         {
@@ -98,8 +49,8 @@
             "price": 5000,
             "bar_code": "57275",
             "description": "4GB RAM e 256GB Mem\u00f3ria",
-            "owner": 9,
-            "status": "cart"
+            "owner": null,
+            "status": "available"
         },
         {
             "id": 5,
@@ -107,8 +58,89 @@
             "price": 200,
             "bar_code": "342565",
             "description": "Headset Gamer RGB com microfone",
-            "owner": 9,
+            "owner": 7,
             "status": "sold"
+        },
+        {
+            "id": 6,
+            "name": "Galaxy S23",
+            "price": 2500,
+            "bar_code": "7534278",
+            "description": "RAM: 8G, Memory: 248GB",
+            "owner": 7,
+            "status": "available"
+        },
+        {
+            "id": 7,
+            "name": "Smart TV XYZ-500",
+            "price": 1200,
+            "bar_code": "9812345",
+            "description": "55-inch 4K UHD, Smart Features",
+            "owner": null,
+            "status": "available"
+        },
+        {
+            "id": 8,
+            "name": "Laptop ABC ProBook",
+            "price": 1800,
+            "bar_code": "4567890",
+            "description": "Intel i7, 16GB RAM, 512GB SSD",
+            "owner": null,
+            "status": "available"
+        },
+        {
+            "id": 9,
+            "name": "Digital Camera ZYX-1000",
+            "price": 800,
+            "bar_code": "6543210",
+            "description": "20MP, 4K Video Recording",
+            "owner": null,
+            "status": "available"
+        },
+        {
+            "id": 10,
+            "name": "Wireless Headphones BT-450",
+            "price": 100,
+            "bar_code": "1122334",
+            "description": "Bluetooth, Over-ear Design",
+            "owner": null,
+            "status": "available"
+        },
+        {
+            "id": 11,
+            "name": "Smartwatch WristGear X1",
+            "price": 300,
+            "bar_code": "7890123",
+            "description": "Fitness Tracker, Heart Rate Monitor",
+            "owner": 7,
+            "status": "available"
+        },
+        {
+            "id": 12,
+            "name": "Gaming Console PowerStation 5",
+            "price": 499,
+            "bar_code": "5678901",
+            "description": "8-core AMD Ryzen, 16GB GDDR6 RAM",
+            "owner": null,
+            "status": "available"
+        },
+        {
+            "id": 13,
+            "name": "Portable Bluetooth Speaker SonicWave 200",
+            "price": 75,
+            "bar_code": "8765432",
+            "description": "20W Output, Water-resistant",
+            "owner": null,
+            "status": "available"
+        },
+        {
+            "id": 14,
+            "name": "Desktop Computer MegaByte Elite",
+            "price": 1500,
+            "bar_code": "2345678",
+            "description": "Intel Core i5, 16GB RAM, 1TB HDD",
+            "owner": null,
+            "status": "available"
         }
     ]
 }
