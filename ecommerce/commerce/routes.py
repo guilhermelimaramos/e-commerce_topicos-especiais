@@ -165,3 +165,7 @@ def remove_cart():
     prod_obj_remove_cart.remove_cart()
     flash(f'Product removed from cart!', category='info')
   return redirect(url_for('page_products'))
+
+@app.route('/about')
+def page_about():
+  return render_template('about.html')
